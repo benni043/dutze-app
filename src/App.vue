@@ -121,7 +121,8 @@ body {
 
 .container {
   max-width: 1000px;
-  margin: 0 auto;
+  margin-top: 5vh;
+  margin-bottom: 50px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background: #f0f0f0;
@@ -261,7 +262,6 @@ body {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #aaa;
-  resize: vertical;
   font-family: inherit;
   font-size: 14px;
   background: white;
