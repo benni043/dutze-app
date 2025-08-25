@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {ref} from "vue";
 
 type Cell = {
   id: number;
@@ -9,7 +9,7 @@ type Cell = {
 };
 
 const rows = ref(5);
-const cols = ref(5);
+const cols = ref(6);
 const selectedColor = ref("#3498db");
 const grid = ref<Cell[]>([]);
 const note = ref("");
@@ -25,7 +25,7 @@ const initGrid = () => {
       if (existing) {
         newGrid.push(existing);
       } else {
-        newGrid.push({ id: id++, x: r, y: c, color: null });
+        newGrid.push({id: id++, x: r, y: c, color: null});
       }
     }
   }
@@ -42,7 +42,9 @@ const resetGrid = () => {
 
 const toggleDark = () => {
   isDark.value = !isDark.value;
+  document.body.classList.toggle("dark", isDark.value);
 };
+
 
 initGrid();
 </script>
@@ -61,6 +63,7 @@ initGrid();
               @change="initGrid"
           />
         </div>
+
         <div class="nav-item">
           <label>Spalten</label>
           <input
@@ -70,17 +73,24 @@ initGrid();
               @change="initGrid"
           />
         </div>
+
         <div class="nav-item">
           <label>Farbe</label>
-          <input type="color" v-model="selectedColor" />
+          <input type="color" v-model="selectedColor"/>
         </div>
       </div>
 
       <div class="nav-actions">
-        <button @click="resetGrid" class="reset-btn">Reset</button>
-        <button @click="toggleDark" class="dark-toggle">
-          {{ isDark ? "☀️ Light" : "🌙 Dark" }}
-        </button>
+        <div class="nav-item">
+          <button @click="resetGrid" class="reset-btn">Reset</button>
+        </div>
+
+        <div class="nav-item">
+          <button @click="toggleDark" class="dark-toggle">
+            {{ isDark ? "☀️ Light" : "🌙 Dark" }}
+          </button>
+        </div>
+
       </div>
     </nav>
 
@@ -113,130 +123,94 @@ initGrid();
   </div>
 </template>
 
-<style scoped>
+<style>
 body {
-  margin: 1px;
-  padding: 0;
+  margin: 0;
+  background-color: white;
+}
+
+body.dark {
+  background-color: black;
 }
 
 .container {
-  max-width: 1000px;
-  margin-top: 5vh;
-  margin-bottom: 50px;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  color: #222;
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  gap: 50px;
+  margin: 5vh 5vw;
 }
 
-/* DARK MODE */
-.container.dark {
-  background: #1e1e1e;
-  color: #eee;
-}
-
-.container.dark .navbar {
-  background: #0f0f0f;
-}
-
-.container.dark .grid {
-  background: #252525;
-  border-color: #333;
-}
-
-.container.dark .cell {
-  border-color: #555;
-}
-
-.container.dark .notes textarea {
-  background: #333;
-  border-color: #555;
-  color: #eee;
-}
-
-/* NAVBAR */
 .navbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  gap: 20px;
-  background: #3a3a3a;
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  color: white;
+  gap: 10px;
 }
 
-.nav-controls {
+.nav-controls,
+.nav-actions {
   display: flex;
-
-  gap: 20px;
-  flex-wrap: wrap;
+  flex: 1;
+  gap: 10px;
 }
 
 .nav-item {
+  flex: 1;
+  min-width: 80px;
   display: flex;
   flex-direction: column;
-  font-size: 13px;
-  gap: 5px;
   align-items: center;
+  gap: 5px;
 }
 
-.nav-item input {
-  width: 60px;
-  border-radius: 4px;
+.nav-item input,
+.nav-item button {
+  width: 100%;
+  min-height: 30px;
+  box-sizing: border-box;
+  padding: 6px;
+  border-radius: 60px;
   border: 1px solid #aaa;
+  text-align: center;
+  font-size: 18px;
 }
 
-.nav-item input[type="number"] {
-  padding: 5px;
-}
-
-.nav-actions {
+.notes {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-grow: 1;
+  min-height: 0;
+  margin-bottom: 10px;
 }
 
-.reset-btn,
-.dark-toggle {
-  padding: 8px 14px;
-  color: white;
-  border: none;
+.notes textarea {
+  flex-grow: 1;
+  resize: none;
+  padding: 10px;
   border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-  width: 85px;
+  border: 1px solid #aaa;
+  font-family: inherit;
+  font-size: 16px;
 }
 
 .reset-btn {
-  background: #e74c3c;
-}
-.reset-btn:hover {
-  background: #c0392b;
+  background-color: red;
 }
 
-.dark-toggle {
-  background: #3498db;
+.container.dark {
+  filter: invert(1) hue-rotate(180deg);
 }
-.dark-toggle:hover {
-  background: #2980b9;
-}
+
 
 /* GRID */
 .grid {
+  overflow: auto;
   display: grid;
   gap: 6px;
-  border: 1px solid #ccc;
   padding: 10px;
-  background: #f9f9f9;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 20px;
-  transition: background 0.3s, border 0.3s;
 }
 
 .cell {
@@ -247,25 +221,4 @@ body {
   aspect-ratio: 1 / 1;
 }
 
-.cell:hover {
-  opacity: 0.8;
-}
-
-/* NOTES */
-.notes {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.notes textarea {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #aaa;
-  font-family: inherit;
-  font-size: 14px;
-  background: white;
-  color: inherit;
-  transition: background 0.3s, color 0.3s, border 0.3s;
-}
 </style>
