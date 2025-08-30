@@ -241,6 +241,9 @@ body.dark .reset-btn {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
+
+  grid-template-columns: repeat(auto-fill, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(0, 1fr));
 }
 
 .cell {
@@ -248,7 +251,6 @@ body.dark .reset-btn {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
-  aspect-ratio: 1 / 1;
 }
 
 /* NOTES */
