@@ -52,7 +52,7 @@ initGrid();
 <template>
   <div class="container" :class="{ dark: isDark }">
     <!-- Navbar -->
-    <nav class="navbar">
+    <div class="navbar">
       <div class="nav-controls">
         <div class="nav-item">
           <label>Reihen</label>
@@ -92,9 +92,9 @@ initGrid();
         </div>
 
       </div>
-    </nav>
+    </div>
 
-    <!-- Grid -->
+    <!-- grid -->
     <div
         class="grid"
         :style="{
@@ -136,14 +136,18 @@ body.dark {
 }
 
 .container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 90vh;
   gap: 50px;
-  margin: 5vh 5vw;
+  padding: 5vh 5vw 6vh 5vw;
+  box-sizing: border-box;
 }
 
+/* NAV */
+
 .navbar {
+  height: 20vh;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -184,11 +188,41 @@ body.dark .nav-item button {
   border: 1px solid #555;
 }
 
+.reset-btn {
+  background-color: red;
+}
+
+body.dark .reset-btn {
+  background-color: red!important;
+}
+
+/* GRID */
+.grid {
+  height: 50vh;
+  overflow: auto;
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.cell {
+  border: 1px solid #999;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  aspect-ratio: 1 / 1;
+}
+
+/* NOTES */
+
 .notes {
+  height: 30vh;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex-grow: 1;
   min-height: 0;
   margin-bottom: 10px;
 }
@@ -207,32 +241,6 @@ body.dark .notes textarea {
   background-color: #1e1e1e;
   color: #f0f0f0;
   border: 1px solid #555;
-}
-
-.reset-btn {
-  background-color: red;
-}
-
-body.dark .reset-btn {
-  background-color: red!important;
-}
-
-/* GRID */
-.grid {
-  overflow: auto;
-  display: grid;
-  gap: 6px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.cell {
-  border: 1px solid #999;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  aspect-ratio: 1 / 1;
 }
 
 </style>
