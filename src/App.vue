@@ -127,10 +127,12 @@ initGrid();
 body {
   margin: 0;
   background-color: white;
+  color: black;
 }
 
 body.dark {
-  background-color: black;
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
 .container {
@@ -175,6 +177,13 @@ body.dark {
   font-size: 18px;
 }
 
+body.dark .nav-item input,
+body.dark .nav-item button {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
 .notes {
   display: flex;
   flex-direction: column;
@@ -194,14 +203,19 @@ body.dark {
   font-size: 16px;
 }
 
+body.dark .notes textarea {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
 .reset-btn {
   background-color: red;
 }
 
-.container.dark {
-  filter: invert(1) hue-rotate(180deg);
+body.dark .reset-btn {
+  background-color: red!important;
 }
-
 
 /* GRID */
 .grid {
