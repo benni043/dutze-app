@@ -67,6 +67,68 @@ onMounted(async () => {
   }
 });
 
+onMounted(async () => {
+  try {
+    const file2 = await open("settings.json", {
+      write: true,
+      create: true,
+      baseDir: BaseDirectory.AppData,
+    });
+
+    let settings: Record<string, any> = {};
+    const stat2 = await file2.stat();
+
+    if (stat2.size > 0) {
+      const buf2 = new Uint8Array(stat2.size);
+      await file2.read(buf2);
+      try {
+        settings = JSON.parse(new TextDecoder().decode(buf2));
+      } catch {
+        settings = {};
+      }
+    }
+
+    isDark.value = settings.isDark;
+    document.body.classList.toggle("dark", isDark.value);
+
+    await settings.close();
+  } catch (e) {
+    console.log("No saved isDark yet.");
+  }
+})
+
+watch(isDark, async (newValue) => {
+  try {
+    const file = await open("settings.json", {
+      write: true,
+      create: true,
+      baseDir: BaseDirectory.AppData,
+    });
+
+    let settings: Record<string, any> = {};
+    const stat = await file.stat();
+
+    if (stat.size > 0) {
+      const buf = new Uint8Array(stat.size);
+      await file.read(buf);
+      try {
+        settings = JSON.parse(new TextDecoder().decode(buf));
+      } catch {
+        settings = {};
+      }
+    }
+
+    settings.isDark = newValue;
+
+    await file.truncate(0);
+
+    await file.write(new TextEncoder().encode(JSON.stringify(settings, null, 2)));
+    await file.close();
+  } catch (e) {
+    console.error("Failed to save settings:", e);
+  }
+})
+
 watch(note, async (newValue) => {
   try {
     const file = await open('notes.txt', {

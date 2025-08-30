@@ -9,6 +9,15 @@
     "core:default",
     "opener:default",
     "fs:allow-app-read",
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        }
+      ]
+    },
+    "fs:allow-ftruncate",
     "fs:allow-app-read-recursive",
     "fs:allow-appcache-read",
     "fs:allow-appcache-read-recursive",
