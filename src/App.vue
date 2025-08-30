@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
+import {BaseDirectory, open} from "@tauri-apps/plugin-fs";
 
 type Cell = {
   id: number;
@@ -12,7 +13,6 @@ const rows = ref(5);
 const cols = ref(6);
 const selectedColor = ref("#3498db");
 const grid = ref<Cell[]>([]);
-const note = ref("");
 const isDark = ref(false);
 
 const initGrid = () => {
@@ -45,6 +45,42 @@ const toggleDark = () => {
   document.body.classList.toggle("dark", isDark.value);
 };
 
+//save notes
+
+const note = ref("");
+
+onMounted(async () => {
+  try {
+    const file = await open('notes.txt', {
+      read: true,
+      baseDir: BaseDirectory.AppData,
+    });
+
+    const stat = await file.stat();
+    const buf = new Uint8Array(stat.size);
+    await file.read(buf);
+    note.value = new TextDecoder().decode(buf);
+
+    await file.close();
+  } catch (e) {
+    console.log("No saved notes yet.");
+  }
+});
+
+watch(note, async (newValue) => {
+  try {
+    const file = await open('notes.txt', {
+      write: true,
+      create: true,
+      baseDir: BaseDirectory.AppData,
+    });
+
+    await file.write(new TextEncoder().encode(newValue));
+    await file.close();
+  } catch (e) {
+    console.error("Failed to save notes:", e);
+  }
+});
 
 initGrid();
 </script>
@@ -193,7 +229,7 @@ body.dark .nav-item button {
 }
 
 body.dark .reset-btn {
-  background-color: red!important;
+  background-color: red !important;
 }
 
 /* GRID */
